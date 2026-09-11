@@ -17,9 +17,14 @@ import analyticsRoutes from "./routes/analyticsRoutes.js"
 const app = express();
 
 /* ───────────────────────────────── Middleware ───────────────────────────────── */
-app.use
-(cors({
-        origin: process.env.CLIENT_URL || "http://localhost:5173",
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    "https://ai-saas-crm-dashboard.vercel.app",
+    "http://localhost:5173",
+].filter(Boolean);
+
+app.use(cors({
+        origin: allowedOrigins,
         credentials: true,
     })
 );
@@ -32,18 +37,18 @@ app.get("/", (req, res) =>
     res.json({ success: true, status: "ok", service: "Nexora API" })
 );
 
-app.get("/api/health", (req, res) => 
+app.get("/health", (req, res) => 
     res.json({success: true, status:"ok",service: "Nexora API"})
 );
 
-app.use("/api/auth", authRoutes);
-app.use("/api/leads", leadRoutes);
-app.use("/api/notes", noteRoutes);
-app.use("/api/tasks", taskRoutes);
-app.use("/api/contact", contactRoutes);
+app.use("/auth", authRoutes);
+app.use("/leads", leadRoutes);
+app.use("/notes", noteRoutes);
+app.use("/tasks", taskRoutes);
+app.use("/contact", contactRoutes);
 
-app.use("/api/ai", aiRoutes);
-app.use("/api/analytics", analyticsRoutes);
+app.use("/ai", aiRoutes);
+app.use("/analytics", analyticsRoutes);
 
 /* ───────────────────────────────── Error Handling ───────────────────────────────── */
 app.use(notFound);
