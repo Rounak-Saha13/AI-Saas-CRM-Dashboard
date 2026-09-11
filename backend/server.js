@@ -28,6 +28,10 @@ app.use(express.urlencoded({extended: true}));
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
 /* ───────────────────────────────── Routes ───────────────────────────────── */
+app.get("/", (req, res) =>
+    res.json({ success: true, status: "ok", service: "Nexora API" })
+);
+
 app.get("/api/health", (req, res) => 
     res.json({success: true, status:"ok",service: "Nexora API"})
 );
