@@ -17,14 +17,17 @@ import analyticsRoutes from "./routes/analyticsRoutes.js"
 const app = express();
 
 /* ───────────────────────────────── Middleware ───────────────────────────────── */
-const allowedOrigins = [
+const allowedOrigins = new Set([
     process.env.CLIENT_URL,
     "https://ai-saas-crm-dashboard.vercel.app",
     "http://localhost:5173",
-].filter(Boolean);
+].filter(Boolean));
 
 app.use(cors({
-        origin: allowedOrigins,
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+            return callback(new Error("Origin not allowed by CORS"));
+        },
         credentials: true,
     })
 );
